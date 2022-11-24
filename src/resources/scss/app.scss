@@ -1,0 +1,17 @@
+@import '../scss/variables';
+
+h1 {
+    color: $red-color;
+}
+
+h2 {
+    color: $black-color;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+

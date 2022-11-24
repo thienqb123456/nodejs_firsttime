@@ -1,0 +1,169 @@
+<form class="mt-4" method="POST" action="/moments/form-actions">
+    <div>
+        <h3> Đã xóa gần đây</h3>
+        <a href="/me/stored/moments">Quay lại</a>
+        <div class="mt-4 d-flex ">
+              <div class="form-check">
+                  <input type="checkbox" id="checkbox-all">
+                  <label class="form-check-label" for="checkbox-all">Chọn tất cả</label>
+              </div>
+
+              <select class="form-control-sm" name="action" required>
+                  <option value="">--Chọn hành động--</option>
+                  <option value="restore">Khôi phục</option>
+                  <option value="forceDelete">Xóa vĩnh viễn</option>
+
+                  <option>......</option>
+              </select>
+
+              <button class="btn btn-primary btn-sm btn-submit-checked" disabled="disabled"> Hành động</button>
+         </div>
+    </div>
+    
+    <table class="table mt-4">
+        <thead class="thead-dark">
+            <tr>
+                <th></th>
+                <th scope="col">#</th>
+                <th scope="col">Tiêu đề</th>
+                <th scope="col">Tác giả</th>
+                <th scope="col">Thời gian xóa</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each moments}}
+            <tr>           
+                <td>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="momentIds[]" value="{{this._doc._id}}">
+                    </div>
+                </td> 
+
+                <th scope="row"> {{sum @index 1}} </th>
+                <td> 
+                    <a href="/moments/{{this._doc.slug}}">{{this._doc.name}} </a>
+                    </td>
+                <td>{{this._doc.author}}</td>
+                <td> {{this._doc.createdAt}} </td>  
+                <td> 
+                    <a href="" class="btn btn-link btn-restore" data-id= "{{this._doc._id}}">Khôi phục</a>
+                    <a href="" class="btn btn-link" data-id = "{{this._doc._id}}" data-toggle="modal" data-target="#delete-modal" >Xóa vĩnh viễn</a>
+                </td>   
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="5" class="text-center">
+                  Thùng rác trống.  <a href="/me/stored/moments"> Bấm vào đây để quay lại.</a> 
+                </td>
+            </tr>     
+            {{/each}}
+          
+        </tbody> 
+    </table>              
+  
+</form>
+
+{{!-- Confirm DELETE --}}
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Xóa vĩnh viễn?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Bạn chắc chắn muốn xóa vĩnh viễn chứ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button id="btn-delete-moment" type="submit"  class="btn btn-danger">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- form hidden for submit DELETE method --}}
+<form name ='submit-delete-method' method="POST"> </form>
+
+{{!-- form hidden for submit PATCH method --}}
+<form name ='submit-patch-method' method="POST"> </form>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let momentId;
+        let submitDeleteMethod = document.forms['submit-delete-method'];
+        let btnDeleteMoment = document.getElementById('btn-delete-moment');
+        let btnRestore = $('.btn-restore');
+        let submitRestoreMethod = document.forms['submit-patch-method'];
+        let checkboxAll = $('#checkbox-all');
+        let momentCheckbox = $('input[name="momentIds[]"]');
+        let buttonSubmitChecked = $('.btn-submit-checked');
+        
+        
+        // when dialog confirm clicked
+        $('#delete-modal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget);
+            let momentId = button.data('id');
+        
+            // when delete moment button clicked
+            btnDeleteMoment.onclick = function() {              
+                submitDeleteMethod.action = '/moments/'+ momentId + '/force?_method=DELETE';
+                submitDeleteMethod.submit();
+            };        
+        });
+
+        // when restore moment button clicked
+        btnRestore.click(function(e) {
+              e.preventDefault();
+              let momentId = $(this).data('id');
+              submitRestoreMethod.action ='/moments/'+ momentId + '/restore/?_method=PATCH';
+              submitRestoreMethod.submit();
+        });
+
+        // when checkbox-all clicked
+        checkboxAll.change(function() {
+          let isCheckedAll = $(this).prop('checked');
+          if (isCheckedAll) {
+             momentCheckbox.prop('checked', true);
+             renderSubmitButton()
+             
+          } else {
+            momentCheckbox.prop('checked', false);
+            renderSubmitButton()
+          }
+        });
+
+        // when 1 moment uncheck
+        momentCheckbox.change(function() {
+             let isCheckedAll = momentCheckbox.length === $('input[name="momentIds[]"]:checked').length; // check xem số lượng checkbox đang có có bằng số lượng checkbox đang checked hay không
+             if (isCheckedAll) {
+                checkboxAll.prop('checked', true);
+                renderSubmitButton()
+                
+             } 
+             else {
+                checkboxAll.prop('checked', false);
+                renderSubmitButton()
+             }
+             
+        });
+
+        //enable button submit when checked
+        function renderSubmitButton() {
+            let checkedCount = $('input[name="momentIds[]"]:checked').length;
+            if (checkedCount > 0) {
+                buttonSubmitChecked.attr('disabled', false);
+            }
+            else {
+              buttonSubmitChecked.attr('disabled', true);
+            }
+        };
+
+    });
+</script>
+

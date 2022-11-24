@@ -1,0 +1,16 @@
+h1 {
+  color: red;
+}
+
+h2 {
+  color: black;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+/*# sourceMappingURL=app.css.map */

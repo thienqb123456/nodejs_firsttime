@@ -1,0 +1,30 @@
+<div class='mt-4'>
+    <div class='row'>
+        {{#each moments}}
+            <div class='col-sm-6 col-lg-4'>
+                <div class='card'>
+                    <a href='/moments/{{this._doc.slug}}'>
+                        <img
+                            class='card-img-top'
+                            src='https://i3.ytimg.com/vi/{{this._doc.videoId}}/maxresdefault.jpg'
+                            alt='{{this._doc.slug}}'
+                        />
+                    </a>
+                    <p class='card-text'>Ngày đăng: {{this._doc.createdAt}}</p>
+                    <div class='card-body'>
+                        <a href='/moments/{{this._doc.slug}}'>
+                            <h5 class='card-title'>{{this._doc.name}}</h5>
+                        </a>
+                        <p class='card-text'>Tác giả: {{this._doc.author}}</p>
+                        <p class='card-text'>Mô tả:
+                            {{this._doc.description}}</p>
+                        <a
+                            href='/moments/{{this._doc.slug}}'
+                            class='btn btn-primary'
+                        > Xem Bài Đăng </a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

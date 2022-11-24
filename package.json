@@ -1,0 +1,51 @@
+{
+    "name": "hoc_nodejs_firsttime",
+    "version": "1.0.0",
+    "description": "first time nodejs 15-9-2022",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "nodemon --inspect src/index.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "watch": "sass --watch src/resources/scss/app.scss src/public/css/app.css",
+        "stop-win": "Taskkill /IM node.exe /F",
+        "stop-linux": "killall node",
+        "beautiful-code": "prettier --single-quote --tab-width 4 --trailing-comma all --write \"src/**/*.{js,json,scss}\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thienqb123456/nodejs_firsttime.git"
+    },
+    "keywords": [
+        "nodejs",
+        "firsttime",
+        "f8",
+        "thien"
+    ],
+    "author": "thienvo",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/thienqb123456/nodejs_firsttime/issues"
+    },
+    "homepage": "https://github.com/thienqb123456/nodejs_firsttime#readme",
+    "dependencies": {
+        "bcrypt": "^5.1.0",
+        "cookie-parser": "^1.4.6",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.1",
+        "express-handlebars": "^6.0.6",
+        "jsonwebtoken": "^8.5.1",
+        "method-override": "^3.0.0",
+        "mongoose": "^6.6.5",
+        "mongoose-delete": "^0.5.4",
+        "mongoose-slug-generator": "^1.0.4",
+        "mongoose-slug-updater": "^3.3.0",
+        "nodemon": "^2.0.20"
+    },
+    "devDependencies": {
+        "husky": "^8.0.1",
+        "lint-staged": "^13.0.3",
+        "morgan": "^1.10.0",
+        "prettier": "^2.7.1",
+        "sass": "^1.55.0"
+    }
+}
